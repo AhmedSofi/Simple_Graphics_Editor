@@ -18,5 +18,3 @@ class Editor:
 
     def convert2grayscale(self):
         self.image = cv2.cvtColor(self.image, cv2.COLOR_BGR2GRAY)
-
-# هو كده الصوفي ديما متعب
