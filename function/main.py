@@ -100,7 +100,62 @@ class Editor:
         # Brighten the image by adding all pixel values by the brightening factor
         if len(self.image.shape) == 2:
             self.image = cv2.add(self.image, brightening_factor).astype(np.uint8)
+
         else:
             # convert from BGR to Grayscale
             self.image = cv2.cvtColor(self.image, cv2.COLOR_BGR2GRAY)
             self.image = cv2.add(self.image, brightening_factor).astype(np.uint8)
+
+ 
+
+    def adjust_brightness(image, brightness_value):
+    modified_image = cv2.add(image, brightness_value)
+    modified_image = cv2.cvtColor(modified_image, cv2.COLOR_BGR2RGB)  # Convert to RGB for display
+    return modified_image
+
+    def adjust_color(image, color, adjustment_value):
+    modified_image = image.copy()
+
+      if color == 'Red':
+        modified_image[:, :, 2] = cv2.add(modified_image[:, :, 2], adjustment_value)  # Increase intensity of red channel
+     elif color == 'Green':
+        modified_image[:, :, 1] = cv2.add(modified_image[:, :, 1], adjustment_value)  # Increase intensity of green channel
+    elif color == 'Blue':
+        modified_image[:, :, 0] = cv2.add(modified_image[:, :, 0], adjustment_value)  # Increase intensity of blue channel
+    elif color == 'Yellow':
+        modified_image[:, :, 2] = cv2.add(modified_image[:, :, 2], adjustment_value)  # Increase intensity of red channel
+        modified_image[:, :, 1] = cv2.add(modified_image[:, :, 1], adjustment_value)  # Increase intensity of green channel
+    elif color == 'Purple':
+        modified_image[:, :, 2] = cv2.add(modified_image[:, :, 2], adjustment_value)  # Increase intensity of red channel
+        modified_image[:, :, 0] = cv2.add(modified_image[:, :, 0], adjustment_value)  # Increase intensity of blue channel
+    elif color == 'Cyan':
+        modified_image[:, :, 1] = cv2.add(modified_image[:, :, 1], adjustment_value)  # Increase intensity of green channel
+        modified_image[:, :, 0] = cv2.add(modified_image[:, :, 0], adjustment_value)  # Increase intensity of blue channel
+
+    modified_image = cv2.cvtColor(modified_image, cv2.COLOR_BGR2RGB)  # Convert to RGB for display
+    return modified_image
+
+ 
+  brightened_image = adjust_brightness(img_original, 50)
+
+ 
+ colored_image_blue = adjust_color(img_original, 'Blue', 50)
+ colored_image_green = adjust_color(img_original, 'Green', 50)
+ colored_image_cyan = adjust_color(img_original, 'Cyan', 50)
+ colored_image_purple = adjust_color(img_original, 'Purple', 50)
+ colored_image_yellow = adjust_color(img_original, 'Yellow', 50)
+
+ cv2.imshow('Original Image', img_original)
+ cv2.imshow('Brightened Image', brightened_image)
+ cv2.imshow('Colored Image (Blue)', colored_image_blue)
+ cv2.imshow('Colored Image (Green)', colored_image_green)
+ cv2.imshow('Colored Image (Cyan)', colored_image_cyan)
+ cv2.imshow('Colored Image (Purple)', colored_image_purple)
+ cv2.imshow('Colored Image (Yellow)', colored_image_yellow)
+ cv2.waitKey(0)
+ cv2.destroyAllWindows()
+
+
+
+        
+        
