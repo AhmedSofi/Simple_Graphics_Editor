@@ -109,51 +109,90 @@ class Editor:
  
 
     def adjust_brightness(image, brightness_value):
-    modified_image = cv2.add(image, brightness_value)
-    modified_image = cv2.cvtColor(modified_image, cv2.COLOR_BGR2RGB)  # Convert to RGB for display
-    return modified_image
+             modified_image = cv2.add(image, brightness_value)
+             modified_image = cv2.cvtColor(modified_image, cv2.COLOR_BGR2RGB)  # Convert to RGB for display
+            return modified_image
 
     def adjust_color(image, color, adjustment_value):
-    modified_image = image.copy()
+             modified_image = image.copy()
 
-      if color == 'Red':
-        modified_image[:, :, 2] = cv2.add(modified_image[:, :, 2], adjustment_value)  # Increase intensity of red channel
-     elif color == 'Green':
-        modified_image[:, :, 1] = cv2.add(modified_image[:, :, 1], adjustment_value)  # Increase intensity of green channel
-    elif color == 'Blue':
-        modified_image[:, :, 0] = cv2.add(modified_image[:, :, 0], adjustment_value)  # Increase intensity of blue channel
-    elif color == 'Yellow':
-        modified_image[:, :, 2] = cv2.add(modified_image[:, :, 2], adjustment_value)  # Increase intensity of red channel
-        modified_image[:, :, 1] = cv2.add(modified_image[:, :, 1], adjustment_value)  # Increase intensity of green channel
-    elif color == 'Purple':
-        modified_image[:, :, 2] = cv2.add(modified_image[:, :, 2], adjustment_value)  # Increase intensity of red channel
-        modified_image[:, :, 0] = cv2.add(modified_image[:, :, 0], adjustment_value)  # Increase intensity of blue channel
-    elif color == 'Cyan':
-        modified_image[:, :, 1] = cv2.add(modified_image[:, :, 1], adjustment_value)  # Increase intensity of green channel
-        modified_image[:, :, 0] = cv2.add(modified_image[:, :, 0], adjustment_value)  # Increase intensity of blue channel
+         if color == 'Red':
+             modified_image[:, :, 2] = cv2.add(modified_image[:, :, 2], adjustment_value)  # Increase intensity of red channel
+         elif color == 'Green':
+             modified_image[:, :, 1] = cv2.add(modified_image[:, :, 1], adjustment_value)  # Increase intensity of green channel
+         elif color == 'Blue':
+             modified_image[:, :, 0] = cv2.add(modified_image[:, :, 0], adjustment_value)  # Increase intensity of blue channel
+         elif color == 'Yellow':
+             modified_image[:, :, 2] = cv2.add(modified_image[:, :, 2], adjustment_value)  # Increase intensity of red channel
+             modified_image[:, :, 1] = cv2.add(modified_image[:, :, 1], adjustment_value)  # Increase intensity of green channel
+         elif color == 'Purple':
+             modified_image[:, :, 2] = cv2.add(modified_image[:, :, 2], adjustment_value)  # Increase intensity of red channel
+             modified_image[:, :, 0] = cv2.add(modified_image[:, :, 0], adjustment_value)  # Increase intensity of blue channel
+         elif color == 'Cyan':
+             modified_image[:, :, 1] = cv2.add(modified_image[:, :, 1], adjustment_value)   
+             modified_image[:, :, 0] = cv2.add(modified_image[:, :, 0], adjustment_value)   
 
-    modified_image = cv2.cvtColor(modified_image, cv2.COLOR_BGR2RGB)  # Convert to RGB for display
-    return modified_image
-
- 
-  brightened_image = adjust_brightness(img_original, 50)
+             modified_image = cv2.cvtColor(modified_image, cv2.COLOR_BGR2RGB)   
+               return modified_image
 
  
- colored_image_blue = adjust_color(img_original, 'Blue', 50)
- colored_image_green = adjust_color(img_original, 'Green', 50)
- colored_image_cyan = adjust_color(img_original, 'Cyan', 50)
- colored_image_purple = adjust_color(img_original, 'Purple', 50)
- colored_image_yellow = adjust_color(img_original, 'Yellow', 50)
+           brightened_image = adjust_brightness(img_original, 50)
 
- cv2.imshow('Original Image', img_original)
- cv2.imshow('Brightened Image', brightened_image)
- cv2.imshow('Colored Image (Blue)', colored_image_blue)
- cv2.imshow('Colored Image (Green)', colored_image_green)
- cv2.imshow('Colored Image (Cyan)', colored_image_cyan)
- cv2.imshow('Colored Image (Purple)', colored_image_purple)
- cv2.imshow('Colored Image (Yellow)', colored_image_yellow)
- cv2.waitKey(0)
- cv2.destroyAllWindows()
+           colored_image_blue = adjust_color(img_original, 'Blue', 50)
+           colored_image_green = adjust_color(img_original, 'Green', 50)
+           colored_image_cyan = adjust_color(img_original, 'Cyan', 50)
+           colored_image_purple = adjust_color(img_original, 'Purple', 50)
+           colored_image_yellow = adjust_color(img_original, 'Yellow', 50)
+
+           cv2.imshow('Original Image', img_original)
+           cv2.imshow('Brightened Image', brightened_image)
+           cv2.imshow('Colored Image (Blue)', colored_image_blue)
+           cv2.imshow('Colored Image (Green)', colored_image_green)
+           cv2.imshow('Colored Image (Cyan)', colored_image_cyan)
+           cv2.imshow('Colored Image (Purple)', colored_image_purple)
+           cv2.imshow('Colored Image (Yellow)', colored_image_yellow)
+           cv2.waitKey(0)
+           cv2.destroyAllWindows()
+
+
+
+
+     
+  import matplotlib.pyplot as plt
+
+    def plot_histogram(image, channels='BGR'):
+       if channels == 'BGR':
+        color = ('b', 'g', 'r')
+          for i, col in enumerate(color):
+            histogram = cv2.calcHist([image], [i], None, [256], [0, 256])
+            plt.plot(histogram, color=col)
+            plt.xlim([0, 256])
+          plt.xlabel('Pixel Value')
+          plt.ylabel('Frequency')
+          plt.title('BGR Image Histogram')
+       elif channels == 'Grayscale':
+          histogram = cv2.calcHist([image], [0], None, [256], [0, 256])
+          plt.plot(histogram, color='black')
+          plt.xlabel('Pixel Value')
+          plt.ylabel('Frequency')
+          plt.title('Grayscale Image Histogram')
+       elif channels in ['Red', 'Green', 'Blue']:
+          channel_idx = {'Red': 2, 'Green': 1, 'Blue': 0}
+          idx = channel_idx[channels]
+          histogram = cv2.calcHist([image], [idx], None, [256], [0, 256])
+          plt.plot(histogram, color=channels.lower())
+          plt.xlabel('Pixel Value')
+          plt.ylabel('Frequency')
+         plt.title(f'{channels} Channel Histogram')
+
+ 
+
+ 
+         plot_histogram(img, channels='BGR')
+ 
+
+         plt.show()
+
 
 
 
