@@ -19,11 +19,51 @@ class Editor:
     def convert2grayscale(self):
         self.image = cv2.cvtColor(self.image, cv2.COLOR_BGR2GRAY)
     
-    """
-    //////////////////////////////////////////////////////////////////////
-    The functions belonging to Amal are missing from this location. 👉👈
-    //////////////////////////////////////////////////////////////////////
-    """
+    def color_elimination(self, color):
+        if len(self.image.shape) == 2:
+            print("The image is already in grayscale.")
+            return
+
+        # Define color channel elimination based on the desired color
+        if color == "red":
+            self.image[:, :, 2] = 0  # Eliminate red channel
+        elif color == "green":
+            self.image[:, :, 1] = 0  # Eliminate green channel
+        elif color == "blue":
+            self.image[:, :, 0] = 0  # Eliminate blue channel
+        elif color == "yellow":
+            self.image[:, :, 2] = 0  # Eliminate red channel
+            self.image[:, :, 1] = 0  # Eliminate green channel
+        elif color == "cyan":
+            self.image[:, :, 1] = 0  # Eliminate green channel
+            self.image[:, :, 0] = 0  # Eliminate blue channel
+        elif color == "purple":
+            self.image[:, :, 0] = 0  # Eliminate blue channel
+            self.image[:, :, 2] = 0  # Eliminate green channel
+        else:
+            print("Invalid color option.")
+
+    def color_channel_swap(self, channel_order):
+        if self.image is None:
+            print("Open an image first.")
+            return None
+
+        img_rgb = self.image.copy()
+
+        # Return the original image for RGB order
+        if channel_order == 'RGB':
+            return img_rgb
+        elif channel_order == 'GRB':
+            img_rgb[:, :, [1, 0, 2]] = img_rgb[:, :, [0, 1, 2]]  # Swap intensity between R and G channels (GRB)
+        elif channel_order == 'RBG':
+            img_rgb[:, :, [2, 1, 0]] = img_rgb[:, :, [0, 1, 2]]  # Swap intensity between G and B channels (RBG)
+        elif channel_order == 'BGR':
+            img_rgb[:, :, [2, 0, 1]] = img_rgb[:, :, [0, 1, 2]]  # Swap intensity between B and R channels (BGR)
+        else:
+            print("Invalid channel order specified.")
+
+        self.image = img_rgb
+
 
     def complement_image(self):
         if len(self.image.shape) == 2:
