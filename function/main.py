@@ -151,6 +151,178 @@ class Editor:
             print("Invalid channel option.")
 
         plt.show()
+def increase_contrast(img_path):
+    # Read the image in grayscale
+    img = cv2.imread(img_path, 0)  # Read the image as grayscale
+    
+    # Check if the image is successfully loaded
+    if img is None:
+        print("Could not read the image.")
+        return
+    
+    # Apply histogram equalization to increase contrast
+    equalized_img = cv2.equalizeHist(img)
+    
+    # Display the original and equalized images
+    cv2.imshow('Original Image', img)
+    cv2.imshow('Equalized Image', equalized_img)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+
+def apply_median_filter(image_path, kernel_size=3):
+    # Read the image
+    img = cv2.imread(image_path)
+
+    # Check if the image is successfully loaded
+    if img is None:
+        print("Could not read the image.")
+        return
+
+    # Apply the median filter
+    smoothed = cv2.medianBlur(img, kernel_size)
+
+    # Display the original and smoothed images
+    cv2.imshow('Original Image', img)
+    cv2.imshow('Smoothed Image (Median Filter)', smoothed)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+
+# Function to apply average filter for smoothing
+def apply_average_filter(image_path, kernel_size=3):
+    # Read the image
+    img = cv2.imread(image_path)
+
+    # Check if the image is successfully loaded
+    if img is None:
+        print("Could not read the image.")
+        return
+
+    # Apply the average filter
+    smoothed = cv2.blur(img, (kernel_size, kernel_size))
+
+    # Display the original and smoothed images
+    cv2.imshow('Original Image', img)
+    cv2.imshow('Smoothed Image (Average Filter)', smoothed)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+
+# Function to apply Min filter for smoothing
+def apply_min_filter(image_path, kernel_size=3):
+    # Read the image
+    img = cv2.imread(image_path)
+
+    # Check if the image is successfully loaded
+    if img is None:
+        print("Could not read the image.")
+        return
+
+    # Define the kernel for the min filter
+    kernel = np.ones((kernel_size, kernel_size), np.uint8)
+
+    # Apply the min filter (erosion)
+    smoothed = cv2.erode(img, kernel, iterations=1)
+
+    # Display the original and smoothed images
+    cv2.imshow('Original Image', img)
+    cv2.imshow('Smoothed Image (Min Filter)', smoothed)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+
+# Example usage:
+
+
+def apply_max_filter(image_path, kernel_size=3):
+    # Read the image
+    img = cv2.imread(image_path)
+
+    # Check if the image is successfully loaded
+    if img is None:
+        print("Could not read the image.")
+        return
+
+    # Define the kernel for the max filter
+    kernel = np.ones((kernel_size, kernel_size), np.uint8)
+
+    # Apply the max filter (dilation)
+    smoothed = cv2.dilate(img, kernel, iterations=1)
+
+    # Display the original and smoothed images
+    cv2.imshow('Original Image', img)
+    cv2.imshow('Smoothed Image (Max Filter)', smoothed)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+
+def sharpen_with_range_filter(image_path, kernel):
+    # Load the image
+    image = cv2.imread(image_path)
+
+    # Convert the image to grayscale
+    gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
+    # Apply the range filter
+    sharpened_image = cv2.filter2D(gray_image, -1, kernel)
+
+    # Display the original and sharpened images
+    cv2.imshow('Original Image', gray_image)
+    cv2.imshow('Sharpened Image', sharpened_image)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+
+# Dilation
+def apply_dilation(image_path, kernel_size):
+    image = cv2.imread(image_path)
+    gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    kernel = np.ones((kernel_size, kernel_size), np.uint8)
+    dilation = cv2.dilate(gray_image, kernel, iterations=1)
+    cv2.imshow('Dilated Image', dilation)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+
+# Erosion
+def apply_erosion(image_path, kernel_size):
+    image = cv2.imread(image_path)
+    gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    kernel = np.ones((kernel_size, kernel_size), np.uint8)
+    erosion = cv2.erode(gray_image, kernel, iterations=1)
+    cv2.imshow('Eroded Image', erosion)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+
+# Opening
+def apply_opening(image_path, kernel_size):
+    image = cv2.imread(image_path)
+    gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    kernel = np.ones((kernel_size, kernel_size), np.uint8)
+    opening = cv2.morphologyEx(gray_image, cv2.MORPH_OPEN, kernel)
+    cv2.imshow('Opened Image', opening)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+
+# Closing
+def apply_closing(image_path, kernel_size):
+    image = cv2.imread(image_path)
+    gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    kernel = np.ones((kernel_size, kernel_size), np.uint8)
+    closing = cv2.morphologyEx(gray_image, cv2.MORPH_CLOSE, kernel)
+    cv2.imshow('Closed Image', closing)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+
+
+def apply_global_thresholding(image_path, threshold_value):
+    image = cv2.imread(image_path, 0)  # Read the image in grayscale
+    _, thresholded = cv2.threshold(image, threshold_value, 255, cv2.THRESH_BINARY)
+    cv2.imshow('Global Thresholding', thresholded)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+
+# Adaptive Thresholding Segmentation
+def apply_adaptive_thresholding(image_path):
+    image = cv2.imread(image_path, 0)  # Read the image in grayscale
+    adaptive_threshold = cv2.adaptiveThreshold(image, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, 11, 2)
+    cv2.imshow('Adaptive Thresholding', adaptive_threshold)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
 
 
 
