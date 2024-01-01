@@ -236,7 +236,7 @@ class Editor:
 
     def apply_global_thresholding(self, threshold_value):
         self.image = self.image_copy.copy()
-        _, self.image = cv2.threshold(self.image, threshold_value, 255, cv2.THRESH_BINARY)
+        self.image = cv2.threshold(self.image, threshold_value, 255, cv2.THRESH_BINARY)
 
     def apply_adaptive_thresholding(self, block_size, constant):
         self.image = self.image_copy.copy()
