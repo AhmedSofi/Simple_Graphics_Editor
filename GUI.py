@@ -32,9 +32,9 @@ class GUI:
         if file_path:
             self.editor = Editor(file_path)
             img = Image.open(file_path)
-            
-               
-            
+
+
+
 
             img_tk = ImageTk.PhotoImage(img)
 
@@ -665,6 +665,22 @@ class GUI:
         submit_button = tk.Button(self.form, text="Resize", command=self.resize_image)
         submit_button.grid(row=2, column=1, padx=10, pady=5)
 
+    def save_image(self):
+        if not self.editor or self.editor.image is None:
+            messagebox.showerror("Error", "No image to save. Please open an image first.")
+            return
+
+        file_path = filedialog.asksaveasfilename(defaultextension=".png",
+                                                 filetypes=[("PNG files", "*.png"),
+                                                            ("JPEG files", "*.jpg"),
+                                                            ("All files", "*.*")])
+        if file_path:
+            try:
+                cv2.imwrite(file_path, self.editor.image)
+                messagebox.showinfo("Success", f"Image saved to {file_path}")
+            except Exception as e:
+                messagebox.showerror("Error", f"Failed to save image: {str(e)}")
+
     def resize_image(self):
         width = self.width_entry.get()
         height = self.height_entry.get()
@@ -692,9 +708,15 @@ class GUI:
         import_button = tk.Button(self.frame, text="Import Image", command=self.open_and_display_image, bg='#545454'
                                   , width=20, height=2, font=13)
         import_button.grid(row=1, column=0, padx=2, pady=10)
-        import_button = tk.Button(self.frame, text="Original Image", command=self.original_image, bg='#545454'
-                                  , width=20, height=2, font=13)
-        import_button.grid(row=2, column=0, padx=10, pady=10)
+
+        original_button = tk.Button(self.frame, text="Original Image", command=self.original_image, bg='#545454'
+                                    , width=20, height=2, font=13)
+        original_button.grid(row=2, column=0, padx=10, pady=10)
+
+        save_button = tk.Button(self.frame, text="Save Image", command=self.save_image, bg='#545454'
+                                , width=20, height=2, font=13)
+        save_button.grid(row=3, column=0, padx=10, pady=10)
+
         self.type_Var = tk.StringVar()
         operations = ['Show Image', 'Convert to Grayscale', 'Color Elimination', 'Resize', 'Color Channel Swap',
                       'Complement Image', 'Solarize Image', 'Darken Image', 'Brighten Image', 'Adjust Brightness',
@@ -704,9 +726,9 @@ class GUI:
         type_dropdown = ttk.Combobox(self.frame, textvariable=self.type_Var, values=operations, state='readonly',
                                      font=15)
         type_dropdown.grid(row=2, column=1, padx=10, pady=10)
-        import_button = tk.Button(self.frame, text="apply", command=lambda: self.apply_operation(self.type_Var.get())
-                                  , bg='#545454', width=20, height=2, font=13)
-        import_button.grid(row=1, column=1, padx=10, pady=10)
+        apply_button = tk.Button(self.frame, text="apply", command=lambda: self.apply_operation(self.type_Var.get())
+                                 , bg='#545454', width=20, height=2, font=13)
+        apply_button.grid(row=1, column=1, padx=10, pady=10)
 
 
 if __name__ == "__main__":
